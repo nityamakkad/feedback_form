@@ -1,123 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Feedback</title>
+  <meta charset="UTF-8">
+  <title>Feedback Form</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
+      margin: 30px;
+      background: #f8f9fa;
     }
     h2 {
-      font-size: 24px;
+      color: #333;
     }
     .question {
-      margin: 20px 0;
+      margin-bottom: 20px;
     }
-    .ratings {
+    .rating {
       display: flex;
-      justify-content: center;
       gap: 10px;
-      margin-top: 10px;
     }
-    .ratings button {
-      width: 40px;
-      height: 40px;
-      font-size: 16px;
+    .rating button {
+      padding: 10px 15px;
       border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #f1f1f1;
+      background: #fff;
       cursor: pointer;
     }
-    .ratings button.selected {
-      background-color: #4CAF50;
-      color: white;
+    .rating button.selected {
+      background-color: #007bff;
+      color: #fff;
+      border-color: #007bff;
     }
-    #submit-btn {
+    #submitBtn {
       margin-top: 30px;
       padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
+      background: #28a745;
+      color: #fff;
       border: none;
-      border-radius: 6px;
       cursor: pointer;
     }
-    #thank-you {
+    #thankYou {
       display: none;
-      margin-top: 30px;
-      font-size: 18px;
-      color: #28a745;
+      margin-top: 20px;
+      color: green;
+    }
+    #emailField {
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <h2>✨ Help us improve! Just 3 quick questions.</h2>
 
-  <div class="question" data-question="1">
-    <p>1. How helpful did you find the conversation overall?</p>
-    <div class="ratings">
-      <button>1</button><button>2</button><button>3</button><button>4</button><button>5</button>
+  <h2>Quick Feedback</h2>
+
+  <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
+
+    <div id="emailField">
+      <label>Email:</label><br>
+      <input type="email" id="email" required placeholder="Enter your email" style="padding: 8px; width: 300px;">
     </div>
-  </div>
 
-  <div class="question" data-question="2">
-    <p>2. How clear was the guidance or input shared with you?</p>
-    <div class="ratings">
-      <button>1</button><button>2</button><button>3</button><button>4</button><button>5</button>
+    <div class="question">
+      <label>1. How helpful did you find the conversation overall?</label>
+      <div class="rating" data-question="q1">
+        <button type="button" value="1">1</button>
+        <button type="button" value="2">2</button>
+        <button type="button" value="3">3</button>
+        <button type="button" value="4">4</button>
+        <button type="button" value="5">5</button>
+      </div>
     </div>
-  </div>
 
-  <div class="question" data-question="3">
-    <p>3. How confident or supported do you feel after the conversation?</p>
-    <div class="ratings">
-      <button>1</button><button>2</button><button>3</button><button>4</button><button>5</button>
+    <div class="question">
+      <label>2. How clear was the guidance?</label>
+      <div class="rating" data-question="q2">
+        <button type="button" value="1">1</button>
+        <button type="button" value="2">2</button>
+        <button type="button" value="3">3</button>
+        <button type="button" value="4">4</button>
+        <button type="button" value="5">5</button>
+      </div>
     </div>
-  </div>
 
-  <button id="submit-btn">Submit</button>
-  <div id="thank-you">✅ Thank you for your feedback!</div>
+    <div class="question">
+      <label>3. How confident do you feel after the call?</label>
+      <div class="rating" data-question="q3">
+        <button type="button" value="1">1</button>
+        <button type="button" value="2">2</button>
+        <button type="button" value="3">3</button>
+        <button type="button" value="4">4</button>
+        <button type="button" value="5">5</button>
+      </div>
+    </div>
+
+    <button type="submit" id="submitBtn">Submit Feedback</button>
+  </form>
+
+  <div id="thankYou">
+    ✅ Thank you for your feedback!
+  </div>
 
   <script>
-    const questions = document.querySelectorAll(".question");
+    const ratings = document.querySelectorAll(".rating");
 
-    questions.forEach((q, index) => {
-      const buttons = q.querySelectorAll("button");
-      buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          buttons.forEach(b => b.classList.remove("selected"));
-          btn.classList.add("selected");
-        });
+    ratings.forEach(group => {
+      group.addEventListener("click", (e) => {
+        if (e.target.tagName === "BUTTON") {
+          [...group.children].forEach(btn => btn.classList.remove("selected"));
+          e.target.classList.add("selected");
+        }
       });
     });
 
-    document.getElementById("submit-btn").addEventListener("click", () => {
-      const responses = [];
-      let allAnswered = true;
+    function submitFeedback() {
+      const email = document.getElementById("email").value.trim();
+      const q1 = document.querySelector('[data-question="q1"] .selected')?.value;
+      const q2 = document.querySelector('[data-question="q2"] .selected')?.value;
+      const q3 = document.querySelector('[data-question="q3"] .selected')?.value;
 
-      questions.forEach((q, idx) => {
-        const selected = q.querySelector("button.selected");
-        if (selected) {
-          responses.push(selected.textContent);
-        } else {
-          allAnswered = false;
-        }
-      });
-
-      if (!allAnswered) {
-        alert("Please rate all three questions.");
+      if (!email || !q1 || !q2 || !q3) {
+        alert("Please complete all fields.");
         return;
       }
 
-      // 🚀 Send to Google Sheets or Formspree endpoint here
-      console.log("User Responses:", responses); // placeholder
-
-      // Show thank-you message
-      document.getElementById("thank-you").style.display = "block";
-      document.getElementById("submit-btn").style.display = "none";
-    });
+      fetch("https://script.google.com/macros/s/AKfycbxKEPBfWXxWIv4V8g0jdCYVAFuVVVDnM6gDgUEk_XF6mVsZalLDKr1rCAwN7kEliblSJA/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          q1: q1,
+          q2: q2,
+          q3: q3
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          document.getElementById("feedbackForm").style.display = "none";
+          document.getElementById("thankYou").style.display = "block";
+        } else {
+          alert("Something went wrong!");
+        }
+      })
+      .catch(error => {
+        console.error("Error submitting feedback:", error);
+        alert("Failed to submit. Please try again.");
+      });
+    }
   </script>
+
 </body>
 </html>
