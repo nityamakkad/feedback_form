@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feedback</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    h2 {
+      font-size: 24px;
+    }
+    .question {
+      margin: 20px 0;
+    }
+    .ratings {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .ratings button {
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f1f1f1;
+      cursor: pointer;
+    }
+    .ratings button.selected {
+      background-color: #4CAF50;
+      color: white;
+    }
+    #submit-btn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #thank-you {
+      display: none;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <h2>✨ Help us improve! Just 3 quick questions.</h2>
+
+  <div class="question" data-question="1">
+    <p>1. How helpful did you find the conversation overall?</p>
+    <div class="ratings">
+      <button>1</button><button>2</button><button>3</button><button>4</button><button>5</button>
+    </div>
+  </div>
+
+  <div class="question" data-question="2">
+    <p>2. How clear was the guidance or input shared with you?</p>
+    <div class="ratings">
+      <button>1</button><button>2</button><button>3</button><button>4</button><button>5</button>
+    </div>
+  </div>
+
+  <div class="question" data-question="3">
+    <p>3. How confident or supported do you feel after the conversation?</p>
+    <div class="ratings">
+      <button>1</button><button>2</button><button>3</button><button>4</button><button>5</button>
+    </div>
+  </div>
+
+  <button id="submit-btn">Submit</button>
+  <div id="thank-you">✅ Thank you for your feedback!</div>
+
+  <script>
+    const questions = document.querySelectorAll(".question");
+
+    questions.forEach((q, index) => {
+      const buttons = q.querySelectorAll("button");
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          buttons.forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+        });
+      });
+    });
+
+    document.getElementById("submit-btn").addEventListener("click", () => {
+      const responses = [];
+      let allAnswered = true;
+
+      questions.forEach((q, idx) => {
+        const selected = q.querySelector("button.selected");
+        if (selected) {
+          responses.push(selected.textContent);
+        } else {
+          allAnswered = false;
+        }
+      });
+
+      if (!allAnswered) {
+        alert("Please rate all three questions.");
+        return;
+      }
+
+      // 🚀 Send to Google Sheets or Formspree endpoint here
+      console.log("User Responses:", responses); // placeholder
+
+      // Show thank-you message
+      document.getElementById("thank-you").style.display = "block";
+      document.getElementById("submit-btn").style.display = "none";
+    });
+  </script>
+</body>
+</html>
