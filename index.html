@@ -1,135 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Quick Feedback</title>
+  <meta charset="UTF-8">
+  <title>Feedback Form</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 40px;
-      background-color: #f2f2f2;
+      text-align: center;
+      padding: 40px;
+      background-color: #f4f4f4;
     }
+
     h1 {
       color: #333;
+      margin-bottom: 30px;
     }
-    .question {
-      margin-top: 20px;
+
+    form {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .rating-group {
+      margin-bottom: 20px;
+    }
+
+    .rating-group input[type="radio"] {
+      display: none;
+    }
+
+    .rating-group label {
+      display: inline-block;
+      background: #eee;
+      padding: 10px 15px;
+      margin: 0 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .rating-group input[type="radio"]:checked + label {
+      background: #2a73ff;
+      color: white;
       font-weight: bold;
     }
-    .rating button {
-      margin: 5px;
-      padding: 10px 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background-color: #fff;
-      cursor: pointer;
-    }
-    .rating button.selected {
-      background-color: #0b5ed7;
-      color: white;
-    }
-    .submit-btn {
-      margin-top: 30px;
-      padding: 10px 20px;
-      background-color: #145A32;
+
+    button {
+      background-color: #007B5E;
       color: white;
       border: none;
+      padding: 12px 25px;
+      font-size: 16px;
       border-radius: 6px;
       cursor: pointer;
+      margin-top: 20px;
     }
-    .submit-btn:hover {
-      background-color: #117A37;
-    }
-    input {
-      padding: 8px;
-      width: 300px;
-      margin-bottom: 20px;
+
+    button:hover {
+      background-color: #005f47;
     }
   </style>
 </head>
 <body>
 
-  <h1>Quick Feedback</h1>
+  <h1>✨ Help us improve! Just 3 quick questions.</h1>
 
-  <label for="email">Email:</label><br>
-  <input type="email" id="email" required><br>
+  <form id="feedbackForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
 
-  <div class="question">1. How helpful did you find the conversation overall?</div>
-  <div class="rating" id="q1">
-    <button onclick="selectRating(this, 'q1', 1)">1</button>
-    <button onclick="selectRating(this, 'q1', 2)">2</button>
-    <button onclick="selectRating(this, 'q1', 3)">3</button>
-    <button onclick="selectRating(this, 'q1', 4)">4</button>
-    <button onclick="selectRating(this, 'q1', 5)">5</button>
-  </div>
+    <label>1. How helpful did you find the conversation overall?</label>
+    <div class="rating-group">
+      <input type="radio" id="q1-1" name="q1" value="1" required><label for="q1-1">1</label>
+      <input type="radio" id="q1-2" name="q1" value="2"><label for="q1-2">2</label>
+      <input type="radio" id="q1-3" name="q1" value="3"><label for="q1-3">3</label>
+      <input type="radio" id="q1-4" name="q1" value="4"><label for="q1-4">4</label>
+      <input type="radio" id="q1-5" name="q1" value="5"><label for="q1-5">5</label>
+    </div>
 
-  <div class="question">2. How clear was the guidance?</div>
-  <div class="rating" id="q2">
-    <button onclick="selectRating(this, 'q2', 1)">1</button>
-    <button onclick="selectRating(this, 'q2', 2)">2</button>
-    <button onclick="selectRating(this, 'q2', 3)">3</button>
-    <button onclick="selectRating(this, 'q2', 4)">4</button>
-    <button onclick="selectRating(this, 'q2', 5)">5</button>
-  </div>
+    <label>2. How clear was the guidance?</label>
+    <div class="rating-group">
+      <input type="radio" id="q2-1" name="q2" value="1" required><label for="q2-1">1</label>
+      <input type="radio" id="q2-2" name="q2" value="2"><label for="q2-2">2</label>
+      <input type="radio" id="q2-3" name="q2" value="3"><label for="q2-3">3</label>
+      <input type="radio" id="q2-4" name="q2" value="4"><label for="q2-4">4</label>
+      <input type="radio" id="q2-5" name="q2" value="5"><label for="q2-5">5</label>
+    </div>
 
-  <div class="question">3. How confident do you feel after the call?</div>
-  <div class="rating" id="q3">
-    <button onclick="selectRating(this, 'q3', 1)">1</button>
-    <button onclick="selectRating(this, 'q3', 2)">2</button>
-    <button onclick="selectRating(this, 'q3', 3)">3</button>
-    <button onclick="selectRating(this, 'q3', 4)">4</button>
-    <button onclick="selectRating(this, 'q3', 5)">5</button>
-  </div>
+    <label>3. How confident do you feel after the call?</label>
+    <div class="rating-group">
+      <input type="radio" id="q3-1" name="q3" value="1" required><label for="q3-1">1</label>
+      <input type="radio" id="q3-2" name="q3" value="2"><label for="q3-2">2</label>
+      <input type="radio" id="q3-3" name="q3" value="3"><label for="q3-3">3</label>
+      <input type="radio" id="q3-4" name="q3" value="4"><label for="q3-4">4</label>
+      <input type="radio" id="q3-5" name="q3" value="5"><label for="q3-5">5</label>
+    </div>
 
-  <button class="submit-btn" onclick="submitForm()">Submit Feedback</button>
+    <button type="submit">Submit Feedback</button>
+  </form>
 
   <script>
-    let responses = {
-      q1: null,
-      q2: null,
-      q3: null
-    };
+    document.getElementById("feedbackForm").addEventListener("submit", function(e) {
+      e.preventDefault();
 
-    function selectRating(button, questionId, rating) {
-      responses[questionId] = rating;
-      const buttons = document.querySelectorAll(`#${questionId} button`);
-      buttons.forEach(btn => btn.classList.remove('selected'));
-      button.classList.add('selected');
-    }
+      const data = {
+        email: document.getElementById("email").value,
+        q1: document.querySelector('input[name="q1"]:checked').value,
+        q2: document.querySelector('input[name="q2"]:checked').value,
+        q3: document.querySelector('input[name="q3"]:checked').value
+      };
 
-    function submitForm() {
-      const email = document.getElementById('email').value.trim();
-      if (!email || !responses.q1 || !responses.q2 || !responses.q3) {
-        alert("Please fill out all fields and select all answers.");
-        return;
-      }
-
-      fetch("https://script.google.com/macros/s/AKfycbzkwW6wfSzn9LytspIwUWH06agTYbIYD_aXaYjnO6yRxV62CnMaxlG4H89HWfvvvur05Q/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbyGpzbKW9e00h4hl4HmUAzjTuNvFxVNsydVqAZy6iaZYog6sJOuUCjohbfW3copklvNbQ/exec", {
         method: "POST",
+        mode: "no-cors",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          email: email,
-          q1: responses.q1,
-          q2: responses.q2,
-          q3: responses.q3
-        })
+        body: JSON.stringify(data)
       })
-      .then(res => res.json())
-      .then(data => {
-        if (data.result === "success") {
-          alert("Thank you! Your feedback has been submitted.");
-        } else {
-          throw new Error(data.message || "Failed to submit.");
-        }
+      .then(() => {
+        alert("✅ Thank you! Your feedback has been submitted.");
+        document.getElementById("feedbackForm").reset();
       })
-      .catch(err => {
-        console.error(err);
-        alert("Failed to submit. Please try again.");
+      .catch((error) => {
+        alert("❌ Failed to submit. Please try again.");
+        console.error("Error:", error);
       });
-    }
+    });
   </script>
 
 </body>
