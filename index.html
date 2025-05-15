@@ -1,150 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Feedback Form</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quick Feedback</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 30px;
-      background: #f8f9fa;
+      margin: 40px;
+      background-color: #f2f2f2;
     }
-    h2 {
+    h1 {
       color: #333;
     }
     .question {
-      margin-bottom: 20px;
-    }
-    .rating {
-      display: flex;
-      gap: 10px;
+      margin-top: 20px;
+      font-weight: bold;
     }
     .rating button {
+      margin: 5px;
       padding: 10px 15px;
       border: 1px solid #ccc;
-      background: #fff;
+      border-radius: 4px;
+      background-color: #fff;
       cursor: pointer;
     }
     .rating button.selected {
-      background-color: #007bff;
-      color: #fff;
-      border-color: #007bff;
+      background-color: #0b5ed7;
+      color: white;
     }
-    #submitBtn {
+    .submit-btn {
       margin-top: 30px;
       padding: 10px 20px;
-      background: #28a745;
-      color: #fff;
+      background-color: #145A32;
+      color: white;
       border: none;
+      border-radius: 6px;
       cursor: pointer;
     }
-    #thankYou {
-      display: none;
-      margin-top: 20px;
-      color: green;
+    .submit-btn:hover {
+      background-color: #117A37;
     }
-    #emailField {
+    input {
+      padding: 8px;
+      width: 300px;
       margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h2>Quick Feedback</h2>
+  <h1>Quick Feedback</h1>
 
-  <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
+  <label for="email">Email:</label><br>
+  <input type="email" id="email" required><br>
 
-    <div id="emailField">
-      <label>Email:</label><br>
-      <input type="email" id="email" required placeholder="Enter your email" style="padding: 8px; width: 300px;">
-    </div>
-
-    <div class="question">
-      <label>1. How helpful did you find the conversation overall?</label>
-      <div class="rating" data-question="q1">
-        <button type="button" value="1">1</button>
-        <button type="button" value="2">2</button>
-        <button type="button" value="3">3</button>
-        <button type="button" value="4">4</button>
-        <button type="button" value="5">5</button>
-      </div>
-    </div>
-
-    <div class="question">
-      <label>2. How clear was the guidance?</label>
-      <div class="rating" data-question="q2">
-        <button type="button" value="1">1</button>
-        <button type="button" value="2">2</button>
-        <button type="button" value="3">3</button>
-        <button type="button" value="4">4</button>
-        <button type="button" value="5">5</button>
-      </div>
-    </div>
-
-    <div class="question">
-      <label>3. How confident do you feel after the call?</label>
-      <div class="rating" data-question="q3">
-        <button type="button" value="1">1</button>
-        <button type="button" value="2">2</button>
-        <button type="button" value="3">3</button>
-        <button type="button" value="4">4</button>
-        <button type="button" value="5">5</button>
-      </div>
-    </div>
-
-    <button type="submit" id="submitBtn">Submit Feedback</button>
-  </form>
-
-  <div id="thankYou">
-    ✅ Thank you for your feedback!
+  <div class="question">1. How helpful did you find the conversation overall?</div>
+  <div class="rating" id="q1">
+    <button onclick="selectRating(this, 'q1', 1)">1</button>
+    <button onclick="selectRating(this, 'q1', 2)">2</button>
+    <button onclick="selectRating(this, 'q1', 3)">3</button>
+    <button onclick="selectRating(this, 'q1', 4)">4</button>
+    <button onclick="selectRating(this, 'q1', 5)">5</button>
   </div>
 
+  <div class="question">2. How clear was the guidance?</div>
+  <div class="rating" id="q2">
+    <button onclick="selectRating(this, 'q2', 1)">1</button>
+    <button onclick="selectRating(this, 'q2', 2)">2</button>
+    <button onclick="selectRating(this, 'q2', 3)">3</button>
+    <button onclick="selectRating(this, 'q2', 4)">4</button>
+    <button onclick="selectRating(this, 'q2', 5)">5</button>
+  </div>
+
+  <div class="question">3. How confident do you feel after the call?</div>
+  <div class="rating" id="q3">
+    <button onclick="selectRating(this, 'q3', 1)">1</button>
+    <button onclick="selectRating(this, 'q3', 2)">2</button>
+    <button onclick="selectRating(this, 'q3', 3)">3</button>
+    <button onclick="selectRating(this, 'q3', 4)">4</button>
+    <button onclick="selectRating(this, 'q3', 5)">5</button>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm()">Submit Feedback</button>
+
   <script>
-    const ratings = document.querySelectorAll(".rating");
+    let responses = {
+      q1: null,
+      q2: null,
+      q3: null
+    };
 
-    ratings.forEach(group => {
-      group.addEventListener("click", (e) => {
-        if (e.target.tagName === "BUTTON") {
-          [...group.children].forEach(btn => btn.classList.remove("selected"));
-          e.target.classList.add("selected");
-        }
-      });
-    });
+    function selectRating(button, questionId, rating) {
+      responses[questionId] = rating;
+      const buttons = document.querySelectorAll(`#${questionId} button`);
+      buttons.forEach(btn => btn.classList.remove('selected'));
+      button.classList.add('selected');
+    }
 
-    function submitFeedback() {
-      const email = document.getElementById("email").value.trim();
-      const q1 = document.querySelector('[data-question="q1"] .selected')?.value;
-      const q2 = document.querySelector('[data-question="q2"] .selected')?.value;
-      const q3 = document.querySelector('[data-question="q3"] .selected')?.value;
-
-      if (!email || !q1 || !q2 || !q3) {
-        alert("Please complete all fields.");
+    function submitForm() {
+      const email = document.getElementById('email').value.trim();
+      if (!email || !responses.q1 || !responses.q2 || !responses.q3) {
+        alert("Please fill out all fields and select all answers.");
         return;
       }
 
-      fetch("https://script.google.com/macros/s/AKfycbxKEPBfWXxWIv4V8g0jdCYVAFuVVVDnM6gDgUEk_XF6mVsZalLDKr1rCAwN7kEliblSJA/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzkwW6wfSzn9LytspIwUWH06agTYbIYD_aXaYjnO6yRxV62CnMaxlG4H89HWfvvvur05Q/exec", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           email: email,
-          q1: q1,
-          q2: q2,
-          q3: q3
+          q1: responses.q1,
+          q2: responses.q2,
+          q3: responses.q3
         })
       })
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
-        if (data.status === "success") {
-          document.getElementById("feedbackForm").style.display = "none";
-          document.getElementById("thankYou").style.display = "block";
+        if (data.result === "success") {
+          alert("Thank you! Your feedback has been submitted.");
         } else {
-          alert("Something went wrong!");
+          throw new Error(data.message || "Failed to submit.");
         }
       })
-      .catch(error => {
-        console.error("Error submitting feedback:", error);
+      .catch(err => {
+        console.error(err);
         alert("Failed to submit. Please try again.");
       });
     }
@@ -152,3 +134,4 @@
 
 </body>
 </html>
+
